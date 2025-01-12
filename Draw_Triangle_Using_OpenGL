@@ -1,0 +1,41 @@
+import pygame
+from pygame.locals import *
+from OpenGL.GL import *
+from OpenGL.GLU import *
+
+screenSet = (900, 700)
+
+white = (255, 255,255)
+
+vertices = (
+    (1, 1, 1),
+    (1, -1, 1),
+    (-1, 1, -1)
+)
+edges =(
+    (0,1),
+    (0,2),
+    (1,2)
+)
+screen = pygame.display.set_mode(screenSet, DOUBLEBUF | OPENGL)
+gluPerspective(45, (screenSet[0] / screenSet[1]), 0.1, 50.0)
+glTranslatef (0, 0, -5)
+
+run  = True
+while run:
+    screen.fill(white)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+
+    glBegin(GL_LINES)
+    for edge in edges:
+        for vertex in edge:
+            glVertex3fv(vertices[vertex])
+    glEnd()
+    
+    pygame.display.flip()
+    pygame.time.wait(10)
+pygame.quit()
